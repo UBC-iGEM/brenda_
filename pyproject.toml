@@ -1,0 +1,20 @@
+[project]
+name = "brenda"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "basedpyright>=1.29.4",
+    "biopython>=1.85",
+    "black>=25.1.0",
+    "brendapyrser>=0.0.2",
+    "matplotlib>=3.10.3",
+    "numpy>=2.3.0",
+]
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
