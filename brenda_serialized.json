@@ -344,7 +344,7 @@
     },
     {
       "organism": "Sulfurihydrogenibium sp. Y",
-      "UniprotID": null,
+      "UniprotID": "O3AOP1",
       "KM": 110000.0,
       "ph": {
         "optimum": 6.5,
@@ -704,7 +704,7 @@
       }
     },
     {
-      "organism": "Homo sapiens",
+      "organism": "Mus musculus",
       "UniprotID": null,
       "KM": 15.0,
       "ph": {
@@ -723,7 +723,7 @@
       }
     },
     {
-      "organism": "Homo sapiens",
+      "organism": "Mus musculus",
       "UniprotID": null,
       "KM": 13.0,
       "ph": {
@@ -742,7 +742,7 @@
       }
     },
     {
-      "organism": "Homo sapiens",
+      "organism": "Mus musculus",
       "UniprotID": null,
       "KM": 19.0,
       "ph": {
@@ -780,7 +780,7 @@
       }
     },
     {
-      "organism": "Oryctolagus cuniculus",
+      "organism": "Mus musculus",
       "UniprotID": null,
       "KM": 1.600000023841858,
       "ph": {
@@ -799,7 +799,7 @@
       }
     },
     {
-      "organism": "Methanosarcina thermophila",
+      "organism": "Mus musculus",
       "UniprotID": null,
       "KM": 19.299999237060547,
       "ph": {
@@ -1312,7 +1312,7 @@
       }
     },
     {
-      "organism": "Rattus norvegicus",
+      "organism": "Bos taurus",
       "UniprotID": null,
       "KM": 9.0,
       "ph": {
@@ -1369,7 +1369,7 @@
       }
     },
     {
-      "organism": "Methanothermobacter thermautotrophicus",
+      "organism": "Oryctolagus cuniculus",
       "UniprotID": null,
       "KM": 3.5999999046325684,
       "ph": {
@@ -1388,7 +1388,7 @@
       }
     },
     {
-      "organism": "Methanothermobacter thermautotrophicus",
+      "organism": "Homo sapiens",
       "UniprotID": null,
       "KM": 3.5,
       "ph": {
@@ -1407,7 +1407,7 @@
       }
     },
     {
-      "organism": "Methanothermobacter thermautotrophicus",
+      "organism": "Homo sapiens",
       "UniprotID": null,
       "KM": 9.199999809265137,
       "ph": {
@@ -1426,7 +1426,7 @@
       }
     },
     {
-      "organism": "Methanosarcina thermophila",
+      "organism": "Solanum tuberosum",
       "UniprotID": null,
       "KM": 9.399999618530273,
       "ph": {
@@ -1445,7 +1445,7 @@
       }
     },
     {
-      "organism": "Petroselinum crispum",
+      "organism": "Homo sapiens",
       "UniprotID": null,
       "KM": 8.0,
       "ph": {
@@ -1939,7 +1939,7 @@
       }
     },
     {
-      "organism": "Malassezia globosa",
+      "organism": "Trypanosoma cruzi",
       "UniprotID": null,
       "KM": 8.100000381469727,
       "ph": {
@@ -2015,7 +2015,7 @@
       }
     },
     {
-      "organism": "Halothiobacillus neapolitanus",
+      "organism": "Methanosarcina thermophila",
       "UniprotID": null,
       "KM": 3.200000047683716,
       "ph": {
@@ -2034,7 +2034,7 @@
       }
     },
     {
-      "organism": "Homo sapiens",
+      "organism": "Mus musculus",
       "UniprotID": null,
       "KM": 22.0,
       "ph": {
@@ -2053,7 +2053,7 @@
       }
     },
     {
-      "organism": "Homo sapiens",
+      "organism": "Solanum tuberosum",
       "UniprotID": null,
       "KM": 10.0,
       "ph": {
@@ -2072,7 +2072,7 @@
       }
     },
     {
-      "organism": "Clostridium perfringens",
+      "organism": "Methanosarcina thermophila",
       "UniprotID": null,
       "KM": 3.0999999046325684,
       "ph": {
@@ -2566,7 +2566,7 @@
       }
     },
     {
-      "organism": "Lacticaseibacillus rhamnosus",
+      "organism": "Homo sapiens",
       "UniprotID": null,
       "KM": 7.0,
       "ph": {
@@ -3688,7 +3688,7 @@
     },
     {
       "organism": "Enterobacter sp.",
-      "UniprotID": null,
+      "UniprotID": "B13",
       "KM": 56000.0,
       "ph": {
         "optimum": 6.5,
@@ -4144,7 +4144,7 @@
     },
     {
       "organism": "Vibrio cholerae serotype",
-      "UniprotID": null,
+      "UniprotID": "O1",
       "KM": 70000.0,
       "ph": {
         "optimum": 6.5,
