@@ -1,5 +1,4 @@
-import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from typing import Optional, Tuple
 from numpy import float32, float64
@@ -60,7 +59,7 @@ for substrate, measurements in rxn.KMvalues.items():
                 ph=PHdata(),
                 temp=TempData()
             )
-            
+
 for ph_type in ["optimum", "range"]:
     for entry in rxn.PH.get(ph_type, []):
         value = entry.get("value")
@@ -76,7 +75,7 @@ for ph_type in ["optimum", "range"]:
             entries[organism].ph.optimum = float(value)
         elif ph_type == "range" and isinstance(value, list) and len(value) == 2:
             entries[organism].ph.range = tuple(float(v) for v in value)
-            
+
 for temp_type in ["optimum", "range"]:
     for entry in rxn.temperature.get(temp_type, []):
         value = entry.get("value")
@@ -96,14 +95,6 @@ for temp_type in ["optimum", "range"]:
 brenda_data = BrendaData(entries=entries)
 
 with open("brenda_serialized.json", "w") as f:
-    def convert(obj):
-        if hasattr(obj, "__dict__"):
-            return obj.__dict__
-        elif isinstance(obj, (float32, float64)):
-            return float(obj)
-        return str(obj)
-
-    json.dump(brenda_data.to_dict(), f, indent=4, default=convert)
+    f.write(brenda_data.to_json(indent=4))
 
 print(f"Saved {len(entries)} organism-specific entries to 'brenda_serialized.json'")
-
