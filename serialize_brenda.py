@@ -1,79 +1,109 @@
 import json
-from numpy import float32
+from dataclasses import dataclass, field
+from dataclasses_json import dataclass_json
+from typing import Optional, Tuple
+from numpy import float32, float64
 from brendapyrser import BRENDA
-from brenda_map import PHdata, TempData, BrendaVariant, BrendaData
+
+@dataclass_json
+@dataclass
+class PHdata:
+    optimum: Optional[float] = None
+    range: Optional[Tuple[float, float]] = None
+
+@dataclass_json
+@dataclass
+class TempData:
+    optimum: Optional[float] = None
+    range: Optional[Tuple[float, float]] = None
+
+@dataclass_json
+@dataclass
+class BrendaVariant:
+    UniprotID: Optional[str]
+    KM: float
+    ph: PHdata
+    temp: TempData
+
+@dataclass_json
+@dataclass
+class BrendaData:
+    entries: dict[str, BrendaVariant]
 
 brenda = BRENDA("brenda_db.txt")
+rxn = brenda.reactions.get_by_id("4.2.1.1")
 
-variants = []
-seen_organisms = set()
+organism_to_uniprot = {
+    p.get("name").lower(): p.get("proteinID")
+    for p in rxn.proteins.values()
+    if p.get("name") and p.get("proteinID")
+}
 
-for rxn in brenda.reactions:
-    organism_to_uniprot = {
-        p.get("name").lower(): p.get("proteinID")
-        for p in rxn.proteins.values()
-        if p.get("name") and p.get("proteinID")
-    }
+entries: dict[str, BrendaVariant] = {}
 
-    for substrate, measurements in rxn.KMvalues.items():
-        for entry in measurements:
-            km_value = entry.get("value")
-            if not isinstance(km_value, (int, float)):
-                continue
+for substrate, measurements in rxn.KMvalues.items():
+    for entry in measurements:
+        km_value = entry.get("value")
+        if not isinstance(km_value, (int, float, float32, float64)):
+            continue
 
-            species = entry.get("species", ["unknown"])
-            organism = species[0] if species else "unknown"
+        species = entry.get("species", [])
+        if not species:
+            continue
+        organism = species[0]
+        uniprot_id = organism_to_uniprot.get(organism.lower())
 
-            if organism in seen_organisms:
-                continue
-            seen_organisms.add(organism)
-
-            uniprot_id = organism_to_uniprot.get(organism.lower(), None)
-
-            ph_opt = next(
-                (e["value"] for e in rxn.PH.get("optimum", []) if isinstance(e["value"], (int, float))),
-                None
-            )
-            ph_range = next(
-                (e["value"] for e in rxn.PH.get("range", []) if isinstance(e["value"], list)),
-                None
-            )
-
-            temp_opt = next(
-                (e["value"] for e in rxn.temperature.get("optimum", []) if isinstance(e["value"], (int, float))),
-                None
-            )
-            temp_range = next(
-                (e["value"] for e in rxn.temperature.get("range", []) if isinstance(e["value"], list)),
-                None
-            )
-
-            variant = BrendaVariant(
-                organism=organism,
+        if organism not in entries:
+            entries[organism] = BrendaVariant(
                 UniprotID=uniprot_id,
                 KM=float(km_value),
-                ph=PHdata(
-                    optimum=float(ph_opt) if ph_opt is not None else -1.0,
-                    range=tuple(float(v) for v in ph_range) if ph_range else (-1.0, -1.0),
-                ),
-                temp=TempData(
-                    optimum=float(temp_opt) if temp_opt is not None else -1.0,
-                    range=tuple(float(v) for v in temp_range) if temp_range else (-1.0, -1.0),
-                ),
+                ph=PHdata(),
+                temp=TempData()
             )
+            
+for ph_type in ["optimum", "range"]:
+    for entry in rxn.PH.get(ph_type, []):
+        value = entry.get("value")
+        if value is None:
+            continue
+        species = entry.get("species", [])
+        if not species:
+            continue
+        organism = species[0]
+        if organism not in entries:
+            continue
+        if ph_type == "optimum" and isinstance(value, (int, float, float32, float64)):
+            entries[organism].ph.optimum = float(value)
+        elif ph_type == "range" and isinstance(value, list) and len(value) == 2:
+            entries[organism].ph.range = tuple(float(v) for v in value)
+            
+for temp_type in ["optimum", "range"]:
+    for entry in rxn.temperature.get(temp_type, []):
+        value = entry.get("value")
+        if value is None:
+            continue
+        species = entry.get("species", [])
+        if not species:
+            continue
+        organism = species[0]
+        if organism not in entries:
+            continue
+        if temp_type == "optimum" and isinstance(value, (int, float, float32, float64)):
+            entries[organism].temp.optimum = float(value)
+        elif temp_type == "range" and isinstance(value, list) and len(value) == 2:
+            entries[organism].temp.range = tuple(float(v) for v in value)
 
-            variants.append(variant)
-
-brenda_data = BrendaData(entries=variants)
+brenda_data = BrendaData(entries=entries)
 
 with open("brenda_serialized.json", "w") as f:
     def convert(obj):
         if hasattr(obj, "__dict__"):
             return obj.__dict__
-        elif isinstance(obj, float32):
+        elif isinstance(obj, (float32, float64)):
             return float(obj)
         return str(obj)
 
-    json.dump(brenda_data, f, indent=4, default=convert)
+    json.dump(brenda_data.to_dict(), f, indent=4, default=convert)
 
-print(f"Saved {len(variants)} unique organism entries to 'brenda_serialized.json'")
+print(f"Saved {len(entries)} organism-specific entries to 'brenda_serialized.json'")
+
